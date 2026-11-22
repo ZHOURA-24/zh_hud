@@ -10,34 +10,34 @@ HUD = {
         inside = false,
         fuel = 0,
         speed = 0,
-    }
+    },
 }
 
 function HUD:Toggle(data)
-    SendNUIMessage({
+    SendNUIMessage {
         action = 'visible',
-        data = data
-    })
+        data = data,
+    }
 end
 
 function HUD:SetPlayer(key, value)
     self.player[key] = value
-    SendNUIMessage({
+    SendNUIMessage {
         action = 'player',
         data = {
             key = key,
-            value = value
-        }
-    })
+            value = value,
+        },
+    }
 end
 
 function HUD:SetVehicle(key, value)
     self.vehicle[key] = value
-    SendNUIMessage({
+    SendNUIMessage {
         action = 'vehicle',
         data = {
             key = key,
-            value = value
-        }
-    })
+            value = value,
+        },
+    }
 end

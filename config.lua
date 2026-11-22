@@ -1,5 +1,5 @@
 Config = {
-    debug = true,
-    name = "testhud",
-    kmh = true
+	debug = true,
+	name = 'testhud',
+	kmh = true,
 }
