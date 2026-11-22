@@ -29,20 +29,29 @@ function eventListener(event) {
 	}
 }
 
-useNuiEvent('player', (d) =>
-	iframe.contentWindow.postMessage({ action: 'player', data: d }, '*'),
-);
+function setHudValue(key, value) {
+	const el = document.getElementById(key);
+	if (el) el.textContent = value;
 
-useNuiEvent('vehicle', (d) =>
-	iframe.contentWindow.postMessage({ action: 'vehicle', data: d }, '*'),
-);
+	document.querySelectorAll(`[data-hud="${key}"]`).forEach((target) => {
+		target.style.setProperty('--value', value);
+	});
+}
 
-async function load(_slug) {
-	const resp = await fetch('http://localhost:5173/qb-hud');
-	console.log(resp);
+useNuiEvent('player', ({ key, value }) => setHudValue(key, value));
+
+useNuiEvent('vehicle', ({ key, value }) => {
+	if (key === 'inside') {
+		document.getElementById('vehicle').style.display = value ? '' : 'none';
+		return;
+	}
+	setHudValue(key, value);
+});
+
+async function load(slug) {
+	const resp = await fetch(`http://localhost:5173/${slug}`);
 	const data = await resp.json();
 
-	console.log(data.files);
 	if (!data || !Array.isArray(data.files)) return;
 
 	data.files.forEach((file) => {
@@ -56,6 +65,9 @@ async function load(_slug) {
 			document.head.appendChild(script);
 		}
 	});
+
+	const vehicleEl = document.getElementById('vehicle');
+	vehicleEl.style.display = 'none';
 }
 
 window.addEventListener('load', () => {
